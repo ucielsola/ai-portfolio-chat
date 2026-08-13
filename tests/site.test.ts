@@ -66,4 +66,16 @@ describe('site config and portfolio chat', () => {
 		await chat.answer({ question: 'What did Ada build?' });
 		expect(complete.mock.calls[0][0].messages[0].content).toContain('Use an approachable, concise tone.');
 	});
+
+	it('clears the Langfuse timeout after a successful prompt lookup', async () => {
+		vi.useFakeTimers();
+		const complete = vi.fn().mockResolvedValue({ text: 'Answer.' });
+		const langfuseConfig = defineSiteConfig({ ...config, langfuse: { enabled: true } });
+		const chat = createPortfolioChat(langfuseConfig, { name: 'test', complete }, {
+			langfuse: { getPrompt: vi.fn().mockResolvedValue({ compile: () => 'Guidance.' }) }
+		});
+		await chat.answer({ question: 'What did Ada build?' });
+		expect(vi.getTimerCount()).toBe(0);
+		vi.useRealTimers();
+	});
 });

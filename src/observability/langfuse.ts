@@ -61,10 +61,10 @@ export function createPromptResolver(config: SiteConfig, options: PromptResolver
 }
 
 function withTimeout<T>(value: Promise<T>, timeoutMs: number): Promise<T> {
-	return Promise.race([
-		value,
-		new Promise<T>((_, reject) => setTimeout(() => reject(new Error('Langfuse prompt request timed out.')), timeoutMs))
-	]);
+	return new Promise<T>((resolve, reject) => {
+		const timer = setTimeout(() => reject(new Error('Langfuse prompt request timed out.')), timeoutMs);
+		value.then(resolve, reject).finally(() => clearTimeout(timer));
+	});
 }
 
 export async function safelyTrace(port: LangfusePort | undefined, event: Parameters<NonNullable<LangfusePort['trace']>>[0]): Promise<void> {
