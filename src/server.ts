@@ -28,6 +28,9 @@ export function createPortfolioChatPostHandler(config: SiteConfig, options: Port
 		}
 
 		if (!isQuestionRequest(payload)) return json({ error: 'A non-empty question is required.' }, 400);
+		if (payload.question.trim().length > config.chat.maxMessageChars) {
+			return json({ error: 'Question exceeds the configured length limit.' }, 413);
+		}
 
 		try {
 			const answer = await chat.answer({ question: payload.question });

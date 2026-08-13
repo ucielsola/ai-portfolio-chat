@@ -46,4 +46,23 @@ describe('framework-neutral server handler', () => {
 		expect(failure.status).toBe(502);
 		expect(await failure.json()).toEqual({ error: 'Unable to answer right now.' });
 	});
+
+	it('returns 413 for a question exceeding the configured limit without calling the provider', async () => {
+		const complete = vi.fn();
+		const handler = createPortfolioChatPostHandler(config, {
+			env: {},
+			customProviders: { fake: () => ({ name: 'fake', complete }) }
+		});
+
+		const response = await handler(
+			new Request('https://portfolio.example/api/chat', {
+				method: 'POST',
+				body: JSON.stringify({ question: 'a'.repeat(config.chat.maxMessageChars + 1) })
+			})
+		);
+
+		expect(response.status).toBe(413);
+		expect(await response.json()).toEqual({ error: 'Question exceeds the configured length limit.' });
+		expect(complete).not.toHaveBeenCalled();
+	});
 });
