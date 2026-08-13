@@ -14,6 +14,11 @@
 
 For a change that does not advance a delivery milestone (for example, a typo or maintenance-only change), still add a session-log entry. This preserves a complete multi-session audit trail without inventing product scope.
 
+## Pull request completion
+
+- When a work item is finished and its validation passes, commit and push the scoped changes, then create a GitHub pull request marked ready for review.
+- Do not leave completed work only in the local worktree or as a draft pull request unless the user explicitly requests that state.
+
 ## Scope and safety
 
 - Keep one pull request focused on one roadmap item or a tightly related slice.

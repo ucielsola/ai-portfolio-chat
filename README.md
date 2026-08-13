@@ -25,6 +25,41 @@ const answer = await chat.answer({ question: 'Which projects are most relevant t
 
 Use [`src/config/example.ts`](src/config/example.ts) as the starting config. Keep profile text factual, current, and free of secrets; it becomes the model’s source of truth. Run `npm run build` before consuming the package locally or publishing it.
 
+## Server integration
+
+Mount `createPortfolioChatPostHandler` in a server-only `POST /api/chat` route. It uses standard `Request` and `Response` objects, so the same handler works in Node runtimes and framework route adapters. Pass environment variables only from server code—never import this route or its environment object into browser code.
+
+```ts
+// server/api/chat.ts — server-only module
+import { createPortfolioChatPostHandler } from 'ai-portfolio-chat';
+import { siteConfig } from '../site-config.js';
+
+export const POST = createPortfolioChatPostHandler(siteConfig, {
+  env: process.env,
+  // Optional: pass a LangfusePort created with your server-side SDK adapter.
+  // langfuse: langfusePort,
+});
+```
+
+The handler accepts `POST` JSON shaped as `{ "question": "..." }` and responds with `{ "answer": "..." }`. It creates the configured provider from `env`, so credentials such as `OPENAI_API_KEY` remain on the server. For a custom provider, supply a server-side adapter:
+
+```ts
+createPortfolioChatPostHandler(siteConfig, {
+  env: process.env,
+  customProviders: {
+    myProvider: (providerConfig) => ({
+      name: 'my-provider',
+      async complete(request) {
+        // Call the server-side vendor SDK using its secret from process.env.
+        return { text: '...' };
+      }
+    })
+  }
+});
+```
+
+The handler intentionally returns generic upstream failures. Log provider errors in the host’s server observability layer; do not send error details or environment values to visitors. Request validation is intentionally minimal in this first reference integration and will be strengthened by the public request-boundary milestone.
+
 ## Replacing providers
 
 The built-in `openai-compatible` provider works with OpenAI-compatible `/chat/completions` services. To support another SDK, register a small adapter implementing `ChatProvider`:
