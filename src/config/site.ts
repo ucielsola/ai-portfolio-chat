@@ -48,9 +48,16 @@ export const LangfuseConfigSchema = z
 		publicKeyEnv: nonEmpty.default('LANGFUSE_PUBLIC_KEY'),
 		secretKeyEnv: nonEmpty.default('LANGFUSE_SECRET_KEY'),
 		baseUrl: url.default('https://cloud.langfuse.com'),
-		/** Optional Langfuse prompt name. Local prompts are always the safe fallback. */
-		promptName: nonEmpty.optional(),
-		promptLabel: nonEmpty.default('production')
+		prompts: z
+			.object({
+				/** The remote prompt supplies optional style guidance, never policy or portfolio context. */
+				portfolioAssistant: z
+					.object({ name: nonEmpty.default('Portfolio Assistant'), label: nonEmpty.default('production') })
+					.strict()
+					.default({})
+			})
+			.strict()
+			.default({})
 	})
 	.strict();
 
