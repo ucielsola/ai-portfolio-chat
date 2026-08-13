@@ -17,16 +17,18 @@ This is the durable execution plan for the starter. Keep it current at the end o
 | Config and provider boundary | Done | Strict Zod config, custom provider registry, OpenAI-compatible adapter. |
 | Prompt management | Done | Typed catalog, local fallback, optional Langfuse guidance and tracing. |
 | Package distribution | Done | Build output and package exports are defined. |
-| Production host integration | Not started | The next implementation milestone. |
+| Production host integration | Done | Framework-neutral server handler, server-only documentation, fake-provider integration coverage, and overlong-question request handling are complete. |
 
 ## Milestone 1 — Host integration example
 
 **Goal:** prove the package can be safely used from a real server endpoint without choosing a frontend framework for every consumer.
 
-- [ ] Add a minimal server-side example that loads `SiteConfig`, environment variables, a provider, and optional Langfuse port.
-- [ ] Show a `POST /api/chat`-style handler using `createPortfolioChat`.
-- [ ] Document server-only environment loading and ensure no API key enters browser code.
-- [ ] Add an integration-style test with a fake provider and fake request.
+**Status:** Done.
+
+- [x] Add a minimal server-side example that loads `SiteConfig`, environment variables, a provider, and optional Langfuse port.
+- [x] Show a `POST /api/chat`-style handler using `createPortfolioChat`.
+- [x] Document server-only environment loading and ensure no API key enters browser code.
+- [x] Add an integration-style test with a fake provider and fake request.
 
 **Acceptance criteria:** a new adopter can copy one documented server integration, ask a question, and receive an answer without exposing credentials.
 
@@ -101,5 +103,8 @@ Add newest entries at the top.
 
 | Date | Session / PR | Completed | Next action | Decisions or blockers |
 | --- | --- | --- | --- | --- |
+| 2026-08-13 | PR #4 | Addressed review feedback: overlong questions return a stable `413` before the provider is called. Added regression coverage and validated with `npm run check`, `npm test` (10 tests), and `npm run build`. | Merge PR #4, then start Milestone 2 request schemas and request-size limits. | Scoped to the Milestone 1 request contract; comprehensive public request schemas remain Milestone 2. |
+| 2026-08-13 | PR #4 | Added the policy requiring completed, validated work to be pushed and opened as a ready-for-review PR. GitHub CLI authentication was verified through the host keychain. | Start Milestone 2 request schemas and request-size limits. | This policy applies to all future completed work unless the user explicitly requests otherwise. |
+| 2026-08-13 | PR #4 | Completed Milestone 1: exported framework-neutral `POST` handler, server-only environment guidance, optional Langfuse port support, and fake-provider integration coverage. Validated with `npm run check`, `npm test` (9 tests), and `npm run build`. | Start Milestone 2 request schemas and request-size limits. | Framework-neutral standard `Request`/`Response` remains the reference; the handler keeps provider details server-side. |
 | 2026-08-13 | PR #3 | Added repository-wide roadmap discipline for every change. | Start Milestone 1 with a framework-neutral server handler. | No blocker; framework-neutral is the current default. |
 | 2026-08-13 | PR #2 | Added this roadmap and handoff conventions. | Choose the Milestone 1 reference handler shape. | Framework choice remains open. |
