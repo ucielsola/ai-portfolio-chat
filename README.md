@@ -2,6 +2,8 @@
 
 A publishable, framework-neutral TypeScript package for a portfolio assistant. It keeps all site-specific material in one validated config object, so the chat can be reused across personal sites without copying server code.
 
+See [ROADMAP.md](ROADMAP.md) for the sequenced implementation plan and multi-session handoff log.
+
 ## What is included
 
 - Zod-backed `SiteConfig` with defaults and strict validation.
