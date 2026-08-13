@@ -6,6 +6,7 @@ This is the durable execution plan for the starter. Keep it current at the end o
 
 - `Not started` → `In progress` → `Blocked` → `Done`.
 - One pull request should normally complete one checklist item or a tightly related slice.
+- Follow the repository-wide roadmap rule in [`AGENTS.md`](AGENTS.md): every change is recorded here, including maintenance-only work.
 - Keep provider integrations, framework examples, and optional services behind the existing interfaces.
 - Before starting a task, update its status and add an entry to the session log. Before pausing, record the next concrete action and any decision needed from the owner.
 
@@ -100,4 +101,5 @@ Add newest entries at the top.
 
 | Date | Session / PR | Completed | Next action | Decisions or blockers |
 | --- | --- | --- | --- | --- |
+| 2026-08-13 | PR #3 | Added repository-wide roadmap discipline for every change. | Start Milestone 1 with a framework-neutral server handler. | No blocker; framework-neutral is the current default. |
 | 2026-08-13 | PR #2 | Added this roadmap and handoff conventions. | Choose the Milestone 1 reference handler shape. | Framework choice remains open. |
